@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct MovieListView: View {
-    @State var selectedCategory: Category = .nowShowing
+    @State private var selectedCategory: Category = .nowShowing
+    @State private var searchText = ""
     
     let categories = ["Now Showing", "Popular", "Top Rated", "Upcoming"]
     
     @StateObject var nowPlayingMoviesFetcher = NowPlayingMoviesFetcher()
     @StateObject var popularMoviesFetcher = PopularMoviesFetcher()
+    @StateObject var topRatedMoviesFetcher = TopRatedFetcher()
+    @StateObject var upcomingMoviesFetcher = UpcomingMoviesFetcher()
     
     let columns = [
         GridItem(.adaptive(minimum: 100))
@@ -26,9 +29,9 @@ struct MovieListView: View {
         case .popular:
             return popularMoviesFetcher.popularMovies
         case .topRated:
-            return ResultMovie.exampleResult()
+            return topRatedMoviesFetcher.topRatedMovies
         case .upcoming:
-            return ResultMovie.exampleResult()
+            return upcomingMoviesFetcher.upcomingMovies
         }
     }
     
@@ -40,7 +43,11 @@ struct MovieListView: View {
                         ScrollView(.horizontal) {
                             HStack(spacing: 30) {
                                 ForEach(popularMoviesFetcher.popularMovies) { movie in
-                                    PosterImageView(movie: movie, width: 170, height: 300)
+                                    NavigationLink {
+                                        MovieDetailView(movie: movie)
+                                    } label: {
+                                        PosterImageView(movie: movie, width: 170, height: 300)
+                                    }
                                 }
                                 .padding(.leading)
                             }
@@ -74,16 +81,21 @@ struct MovieListView: View {
                     Section {
                         LazyVGrid(columns: columns) {
                             ForEach(currentCategoryMovies) { movie in
-                                PosterImageView(movie: movie, width: 115, height: 200)
+                                NavigationLink {
+                                    MovieDetailView(movie: movie)
+                                } label: {
+                                    PosterImageView(movie: movie, width: 115, height: 200)
+                                }
                             }
                         }
                     }
                     
                 }
             }
-            .navigationTitle("MovieDu")
+            .navigationTitle("What do you want to watch?")
             .navigationBarTitleDisplayMode(.inline)
             .background(Color.backgroundColor)
+            .searchable(text: $searchText)
         }
         
     }
