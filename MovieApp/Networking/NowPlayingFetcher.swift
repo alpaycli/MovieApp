@@ -5,16 +5,58 @@
 //  Created by Alpay Calalli on 01.07.23.
 //
 
-import SwiftUI
+import Foundation
 
-struct NowPlayingFetcher: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+class NowPlayingMoviesFetcher: ObservableObject {
+    let const = Const()
+    
+    @Published var nowPlayingMovies: [ResultMovie] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String? = nil
+    
+    init() {
+        fetchNowPlayingMovies()
     }
-}
-
-struct NowPlayingFetcher_Previews: PreviewProvider {
-    static var previews: some View {
-        NowPlayingFetcher()
+    
+    func fetchNowPlayingMovies() {
+        isLoading = true
+        errorMessage = nil
+        let headers = [
+            "Authorization": const.auth,
+            "accept": const.accept
+        ]
+        var urlRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1")!)
+        
+        urlRequest.httpMethod = "GET"
+        urlRequest.allHTTPHeaderFields = headers
+        
+        let service = APIService()
+        
+        
+        service.fetch(Movie.self, url: urlRequest) { result in
+            
+            DispatchQueue.main.async {
+                
+                self.isLoading = false
+                
+                switch result {
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                case .success(let movie):
+                    print("--- sucess with \(movie.results.count)")
+                    self.nowPlayingMovies = movie.results
+                }
+            }
+            
+        }
     }
+    
+    func successNowPlayingMovies() -> NowPlayingMoviesFetcher {
+        let fetcher = NowPlayingMoviesFetcher()
+        
+        fetcher.nowPlayingMovies = ResultMovie.exampleResult()
+        
+        return fetcher
+    }
+    
 }

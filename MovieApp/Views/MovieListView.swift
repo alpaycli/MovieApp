@@ -8,8 +8,84 @@
 import SwiftUI
 
 struct MovieListView: View {
+    @State var selectedCategory: Category = .nowShowing
+    
+    let categories = ["Now Showing", "Popular", "Top Rated", "Upcoming"]
+    
+    @StateObject var nowPlayingMoviesFetcher = NowPlayingMoviesFetcher()
+    @StateObject var popularMoviesFetcher = PopularMoviesFetcher()
+    
+    let columns = [
+        GridItem(.adaptive(minimum: 100))
+    ]
+    
+    var currentCategoryMovies: [ResultMovie] {
+        switch selectedCategory {
+        case .nowShowing:
+            return nowPlayingMoviesFetcher.nowPlayingMovies
+        case .popular:
+            return popularMoviesFetcher.popularMovies
+        case .topRated:
+            return ResultMovie.exampleResult()
+        case .upcoming:
+            return ResultMovie.exampleResult()
+        }
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            ScrollView {
+                VStack {
+                    Section {
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 30) {
+                                ForEach(popularMoviesFetcher.popularMovies) { movie in
+                                    PosterImageView(movie: movie, width: 170, height: 300)
+                                }
+                                .padding(.leading)
+                            }
+                        }
+                    }
+                    .padding(.bottom, 30)
+                    
+                    Section {
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(Category.allCases) { category in
+                                    Button {
+                                        selectedCategory = category
+                                    } label: {
+                                        Text(category.rawValue)
+                                            .fontWeight(.semibold)
+                                            .padding()
+                                            .background(selectedCategory == category ? Color.blue : Color.clear)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
+                                    }
+                                    .frame(width: 150)
+                                }
+                                .frame(width: 120)
+                                .padding(.leading)
+                            }
+                        }
+                        .scrollIndicators(.never)
+                    }
+                    
+                    Section {
+                        LazyVGrid(columns: columns) {
+                            ForEach(currentCategoryMovies) { movie in
+                                PosterImageView(movie: movie, width: 115, height: 200)
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            .navigationTitle("MovieDu")
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color.backgroundColor)
+        }
+        
     }
 }
 
