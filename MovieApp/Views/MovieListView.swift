@@ -37,67 +37,68 @@ struct MovieListView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack {
-                    Section {
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 30) {
-                                ForEach(popularMoviesFetcher.popularMovies) { movie in
+            ZStack {
+                Color.backgroundColor
+                    .ignoresSafeArea()
+                ScrollView {
+                    VStack {
+                        Section {
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 30) {
+                                    ForEach(popularMoviesFetcher.popularMovies) { movie in
+                                        NavigationLink {
+                                            MovieDetailView(movie: movie)
+                                        } label: {
+                                            PosterImageView(movie: movie, width: 170, height: 300)
+                                        }
+                                    }
+                                    .padding(.leading)
+                                }
+                            }
+                        }
+                        .padding(.bottom, 30)
+                        
+                        Section {
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    ForEach(Category.allCases) { category in
+                                        Button {
+                                            selectedCategory = category
+                                        } label: {
+                                            Text(category.rawValue)
+                                                .fontWeight(.semibold)
+                                                .padding()
+                                                .background(selectedCategory == category ? Color.blue : Color.clear)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10)
+                                        }
+                                        .frame(width: 150)
+                                    }
+                                    .frame(width: 120)
+                                    .padding(.leading)
+                                }
+                            }
+                            .scrollIndicators(.never)
+                        }
+                        
+                        Section {
+                            LazyVGrid(columns: columns) {
+                                ForEach(currentCategoryMovies) { movie in
                                     NavigationLink {
                                         MovieDetailView(movie: movie)
                                     } label: {
-                                        PosterImageView(movie: movie, width: 170, height: 300)
+                                        PosterImageView(movie: movie, width: 115, height: 200)
                                     }
                                 }
-                                .padding(.leading)
                             }
                         }
                     }
-                    .padding(.bottom, 30)
-                    
-                    Section {
-                        ScrollView(.horizontal) {
-                            HStack {
-                                ForEach(Category.allCases) { category in
-                                    Button {
-                                        selectedCategory = category
-                                    } label: {
-                                        Text(category.rawValue)
-                                            .fontWeight(.semibold)
-                                            .padding()
-                                            .background(selectedCategory == category ? Color.blue : Color.clear)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(10)
-                                    }
-                                    .frame(width: 150)
-                                }
-                                .frame(width: 120)
-                                .padding(.leading)
-                            }
-                        }
-                        .scrollIndicators(.never)
-                    }
-                    
-                    Section {
-                        LazyVGrid(columns: columns) {
-                            ForEach(currentCategoryMovies) { movie in
-                                NavigationLink {
-                                    MovieDetailView(movie: movie)
-                                } label: {
-                                    PosterImageView(movie: movie, width: 115, height: 200)
-                                }
-                            }
-                        }
-                    }
-                    
                 }
             }
-            .navigationTitle("What do you want to watch?")
+            .navigationTitle("What do you want to watch ?")
             .navigationBarTitleDisplayMode(.inline)
-            .background(Color.backgroundColor)
             .searchable(text: $searchText)
         }
-        
     }
 }
 

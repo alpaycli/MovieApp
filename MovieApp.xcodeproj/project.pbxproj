@@ -82,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				C9630B542A501DEC006C5B01 /* MovieAppApp.swift */,
+				C9630B9F2A51BA88006C5B01 /* Components */,
 				C9630B622A5021A9006C5B01 /* Views */,
 				C9630B712A50692C006C5B01 /* Networking */,
 				C9630B632A5021B3006C5B01 /* Model */,
@@ -104,7 +105,6 @@
 			isa = PBXGroup;
 			children = (
 				C9630B802A50760F006C5B01 /* MovieListView.swift */,
-				C9630B862A50821E006C5B01 /* PosterImageView.swift */,
 				C9630B8E2A50A9A3006C5B01 /* MovieDetailView.swift */,
 			);
 			path = Views;
@@ -150,6 +150,14 @@
 				C9630B922A516642006C5B01 /* GenreFetcher.swift */,
 			);
 			path = Categories;
+			sourceTree = "<group>";
+		};
+		C9630B9F2A51BA88006C5B01 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C9630B862A50821E006C5B01 /* PosterImageView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
