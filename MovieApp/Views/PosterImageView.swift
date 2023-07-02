@@ -19,6 +19,7 @@ struct PosterImageView: View {
                 image.resizable()
                     .scaledToFit()
                     .frame(width: width, height: height)
+                    .cornerRadius(40)
             } placeholder: {
                 ProgressView()
             }

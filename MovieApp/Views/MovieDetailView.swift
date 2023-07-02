@@ -93,6 +93,7 @@ struct MovieDetailView: View {
                             }
                             .foregroundColor(Color.lightGrey)
                         }
+                        .padding(.vertical)
                     }
                     
                     Section {
