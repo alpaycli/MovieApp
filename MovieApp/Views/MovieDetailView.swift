@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MovieDetailView: View {
-    let movie: ResultMovie
+    let movie: Movie
     @StateObject var genreFetcher = GenreFetcher()
     @StateObject var moreMoviesFetcher: MoreMoviesFetcher
-    init(movie: ResultMovie) {
+    init(movie: Movie) {
         self.movie = movie
         _moreMoviesFetcher = StateObject(wrappedValue: MoreMoviesFetcher(movieId: movie.id))
     }
-    var moreMovies: [ResultMovie] {
+    var moreMovies: [Movie] {
         moreMoviesFetcher.moreMovies
     }
     
@@ -29,121 +29,119 @@ struct MovieDetailView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color.backgroundColor
-                    .ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        Section {
-                            ZStack {
-                                AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w500/\(movie.backdropPath)")!) { image in
-                                    image.resizable()
-                                        .scaledToFit()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                
-                                Text("⭐ \(movie.voteAverage, specifier: "%.1f")")
-                                    .frame(width: 54, height: 24)
-                                    .background(.black.opacity(0.85))
+        ZStack {
+            Color.backgroundColor
+                .ignoresSafeArea()
+            ScrollView {
+                VStack {
+                    Section {
+                        ZStack {
+                            AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w500/\(movie.backdropPath)")!) { image in
+                                image.resizable()
+                                    .scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            
+                            Text("⭐ \(movie.voteAverage, specifier: "%.1f")")
+                                .frame(width: 54, height: 24)
+                                .background(.black.opacity(0.85))
+                                .cornerRadius(10)
+                                .font(.system(size: 12))
+                                .fontWeight(.bold)
+                                .offset(x: 170, y: 90)
+                                .foregroundColor(.orange)
+                            
+                        }
+                    }
+                    
+                    Section {
+                        Text(movie.originalTitle)
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
+                            .padding(.top, 40)
+                            .frame(maxWidth: .infinity)
+                            .font(.title)
+                    }
+                    
+                    Section {
+                        HStack {
+                            ForEach(allGenres, id: \.self) { genre in
+                                Text(genre)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(.white.opacity(0.85))
+                                    .foregroundColor(.primary)
                                     .cornerRadius(10)
                                     .font(.system(size: 12))
                                     .fontWeight(.bold)
-                                    .offset(x: 170, y: 90)
-                                    .foregroundColor(.orange)
+                            }
+                        }
+                    }
+                    
+                    Section {
+                        HStack(spacing: 20) {
+                            Group {
+                                Text(movie.releaseDate.map { String($0) }[...3].joined())
                                 
+                                Text("|")
+                                
+                                Text(movie.originalLanguage.uppercased())
+                                
+                                Text("|")
+                                
+                                Text("Category")
+                                    .redacted(reason: .placeholder)
                             }
+                            .foregroundColor(Color.lightGrey)
                         }
-                        
-                        Section {
-                            Text(movie.originalTitle)
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                                .padding(.top, 40)
-                                .frame(maxWidth: .infinity)
+                        .padding(.vertical)
+                    }
+                    
+                    Section {
+                        VStack(alignment: .leading) {
+                            Text("Overview")
                                 .font(.title)
-                        }
-                        
-                        Section {
-                            HStack {
-                                ForEach(allGenres, id: \.self) { genre in
-                                    Text(genre)
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 5)
-                                        .background(.white.opacity(0.85))
-                                        .foregroundColor(.primary)
-                                        .cornerRadius(10)
-                                        .font(.system(size: 12))
-                                        .fontWeight(.bold)
-                                }
-                            }
-                        }
-                        
-                        Section {
-                            HStack(spacing: 20) {
-                                Group {
-                                    Text(movie.releaseDate.map { String($0) }[...3].joined())
-                                    
-                                    Text("|")
-                                    
-                                    Text(movie.originalLanguage.uppercased())
-                                    
-                                    Text("|")
-                                    
-                                    Text("Category")
-                                        .redacted(reason: .placeholder)
-                                }
+                                .fontWeight(.bold)
+                                .padding(.vertical, 5)
+                                .foregroundColor(.white)
+                            
+                            
+                            Text(movie.overview)
                                 .foregroundColor(Color.lightGrey)
-                            }
-                            .padding(.vertical)
                         }
-                        
+                        .padding()
+                    }
+                    
+                    if !moreMovies.isEmpty {
                         Section {
                             VStack(alignment: .leading) {
-                                Text("Overview")
+                                Text("More like this")
                                     .font(.title)
-                                    .fontWeight(.bold)
-                                    .padding(.vertical, 5)
+                                    .fontWeight(.black)
                                     .foregroundColor(.white)
                                 
-                                
-                                Text(movie.overview)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                        }
-                        
-                        if !moreMovies.isEmpty {
-                            Section {
-                                VStack(alignment: .leading) {
-                                    Text("More like this")
-                                        .font(.title)
-                                        .fontWeight(.black)
-                                        .foregroundColor(.white)
-                                    
-                                    ScrollView(.horizontal) {
-                                        HStack(spacing: 15) {
-                                            ForEach(moreMovies) { movie in
-                                                NavigationLink {
-                                                    MovieDetailView(movie: movie)
-                                                } label: {
-                                                    PosterImageView(movie: movie, width: 115, height: 200)
-                                                }
+                                ScrollView(.horizontal) {
+                                    HStack(spacing: 15) {
+                                        ForEach(moreMovies) { movie in
+                                            NavigationLink {
+                                                MovieDetailView(movie: movie)
+                                            } label: {
+                                                PosterImageView(movie: movie, width: 115, height: 200)
                                             }
                                         }
                                     }
-                                    .scrollIndicators(.hidden)
                                 }
-                                .padding(.leading, 10)
+                                .scrollIndicators(.hidden)
                             }
+                            .padding(.leading, 10)
                         }
-                        
-                        Spacer()
-                        
                     }
-                    .background(Color.backgroundColor)
+                    
+                    Spacer()
+                    
                 }
+                .background(Color.backgroundColor)
             }
         }
     }
@@ -151,6 +149,6 @@ struct MovieDetailView: View {
 
 struct MovieDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieDetailView(movie: ResultMovie.exampleResult()[0])
+        MovieDetailView(movie: Movie.exampleResult()[0])
     }
 }

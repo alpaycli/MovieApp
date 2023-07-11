@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MovieListView: View {
     @State private var selectedCategory: Category = .nowShowing
-    @State private var searchText = ""
     
     let categories = ["Now Showing", "Popular", "Top Rated", "Upcoming"]
     
@@ -22,7 +21,7 @@ struct MovieListView: View {
         GridItem(.adaptive(minimum: 100))
     ]
     
-    var currentCategoryMovies: [ResultMovie] {
+    var currentCategoryMovies: [Movie] {
         switch selectedCategory {
         case .nowShowing:
             return nowPlayingMoviesFetcher.nowPlayingMovies
@@ -59,7 +58,7 @@ struct MovieListView: View {
                         .padding(.bottom, 30)
                         
                         Section {
-                            ScrollView(.horizontal) {
+                            ScrollView(.horizontal, showsIndicators: false) {
                                 HStack {
                                     ForEach(Category.allCases) { category in
                                         Button {
@@ -68,9 +67,10 @@ struct MovieListView: View {
                                             Text(category.rawValue)
                                                 .fontWeight(.semibold)
                                                 .padding()
-                                                .background(selectedCategory == category ? Color.blue : Color.clear)
+                                                .underline(selectedCategory == category)
                                                 .foregroundColor(.white)
                                                 .cornerRadius(10)
+                                                
                                         }
                                         .frame(width: 150)
                                     }
@@ -78,7 +78,6 @@ struct MovieListView: View {
                                     .padding(.leading)
                                 }
                             }
-                            .scrollIndicators(.never)
                         }
                         
                         Section {
@@ -97,7 +96,6 @@ struct MovieListView: View {
             }
             .navigationTitle("What do you want to watch ?")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchText)
         }
     }
 }

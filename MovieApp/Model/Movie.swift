@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Movie: Codable {
-    let results: [ResultMovie]
+struct MovieResponse: Codable {
+    let results: [Movie]
 }
 
-struct ResultMovie: Codable, Identifiable {
+struct Movie: Codable, Identifiable {
     let id: Int
     let originalLanguage: String
     let originalTitle: String
@@ -52,10 +52,10 @@ struct ResultMovie: Codable, Identifiable {
         self.title = title
     }
     
-    static func exampleResult() -> [ResultMovie] {
+    static func exampleResult() -> [Movie] {
         return [
-            ResultMovie(id: 1, originalLanguage: "en", originalTitle: "Fast X", title: "Fast X", overview: "Vin Diesel drives car", releaseDate: "2023-05-17", voteAverage: 7.3, backdropPath: "/e2Jd0sYMCe6qvMbswGQbM0Mzxt0.jpg", posterPath: "/fiVW06jE7z9YnO4trhaMEdclSiC.jpg", genreIds: [28, 12, 16]),
-            ResultMovie(id: 4, originalLanguage: "ajsdj", originalTitle: "sajdja", title: "sajdja", overview: "jsdja", releaseDate: "ajsdaj", voteAverage: 4.4, backdropPath: "asda", posterPath: "", genreIds: [28, 12, 35])
+            Movie(id: 1, originalLanguage: "en", originalTitle: "Fast X", title: "Fast X", overview: "Vin Diesel drives car", releaseDate: "2023-05-17", voteAverage: 7.3, backdropPath: "/e2Jd0sYMCe6qvMbswGQbM0Mzxt0.jpg", posterPath: "/fiVW06jE7z9YnO4trhaMEdclSiC.jpg", genreIds: [28, 12, 16]),
+            Movie(id: 4, originalLanguage: "ajsdj", originalTitle: "sajdja", title: "sajdja", overview: "jsdja", releaseDate: "ajsdaj", voteAverage: 4.4, backdropPath: "asda", posterPath: "", genreIds: [28, 12, 35])
         ]
     }
 }

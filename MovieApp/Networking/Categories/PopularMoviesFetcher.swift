@@ -10,7 +10,7 @@ import Foundation
 class PopularMoviesFetcher: ObservableObject {
     let const = Const()
     
-    @Published var popularMovies: [ResultMovie] = []
+    @Published var popularMovies: [Movie] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
@@ -34,7 +34,7 @@ class PopularMoviesFetcher: ObservableObject {
         let service = APIService()
         
         
-        service.fetch(Movie.self, url: urlRequest) { result in
+        service.fetch(MovieResponse.self, url: urlRequest) { result in
             
             DispatchQueue.main.async {
                 
@@ -53,7 +53,7 @@ class PopularMoviesFetcher: ObservableObject {
         func successNowPlayingMovies() -> NowPlayingMoviesFetcher {
             let fetcher = NowPlayingMoviesFetcher()
             
-            fetcher.nowPlayingMovies = ResultMovie.exampleResult()
+            fetcher.nowPlayingMovies = Movie.exampleResult()
             
             return fetcher
         }

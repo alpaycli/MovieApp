@@ -10,7 +10,7 @@ import Foundation
 class TopRatedFetcher: ObservableObject {
     let const = Const()
     
-    @Published var topRatedMovies: [ResultMovie] = []
+    @Published var topRatedMovies: [Movie] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
@@ -34,7 +34,7 @@ class TopRatedFetcher: ObservableObject {
         let service = APIService()
         
         
-        service.fetch(Movie.self, url: urlRequest) { result in
+        service.fetch(MovieResponse.self, url: urlRequest) { result in
             
             DispatchQueue.main.async {
                 

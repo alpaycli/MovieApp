@@ -10,7 +10,7 @@ import Foundation
 class MoreMoviesFetcher: ObservableObject {
     let const = Const()
     
-    @Published var moreMovies: [ResultMovie] = []
+    @Published var moreMovies: [Movie] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
@@ -36,7 +36,7 @@ class MoreMoviesFetcher: ObservableObject {
         let service = APIService()
         
         
-        service.fetch(Movie.self, url: urlRequest) { result in
+        service.fetch(MovieResponse.self, url: urlRequest) { result in
             
             DispatchQueue.main.async {
                 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PosterImageView: View {
-    let movie: ResultMovie
+    let movie: Movie
     
     let width: CGFloat
     let height: CGFloat
@@ -29,6 +29,6 @@ struct PosterImageView: View {
 
 struct PosterImageView_Previews: PreviewProvider {
     static var previews: some View {
-        PosterImageView(movie: ResultMovie.exampleResult()[0], width: 115, height: 200)
+        PosterImageView(movie: Movie.exampleResult()[0], width: 115, height: 200)
     }
 }
