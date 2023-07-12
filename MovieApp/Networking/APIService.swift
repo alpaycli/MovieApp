@@ -9,36 +9,28 @@ import Foundation
 
 struct APIService {
     
-    func fetch<T: Decodable>(_ type: T.Type, url: URLRequest?, completion: @escaping(Result<T, APIError>) -> Void) {
+    func fetch<T: Decodable>(_ type: T.Type, url: URLRequest) async throws -> T {
         
-        guard let url = url else {
-            let error = APIError.badURL
-            completion(Result.failure(error))
-            return
+        let (data, response) = try await URLSession.shared.data(for: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.badResponse(statusCode: response.hash)
         }
-       
         
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
-            if let error = error as? URLError {
-                completion(Result.failure(APIError.url(error)))
-            } else if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode) {
-                completion(Result.failure(APIError.badResponse(statusCode: response.statusCode)))
-            } else if let data = data {
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    
-                    let decodedItems = try decoder.decode(type, from: data)
-                    completion(Result.success(decodedItems))
-                } catch {
-                    completion(Result.failure(APIError.parsing(error as? DecodingError)))
-                }
-            }
-
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.badResponse(statusCode: httpResponse.statusCode)
         }
-        task.resume()
         
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        do {
+            let decodedItems = try decoder.decode(type, from: data)
+            return decodedItems
+        } catch {
+            throw APIError.parsing(error as? DecodingError)
+        }
     }
 }
+
 

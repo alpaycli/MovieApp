@@ -26,28 +26,45 @@ class GenreFetcher: ObservableObject {
             "Authorization": const.auth,
             "accept": const.accept
         ]
-        var urlRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/genre/movie/list?language=en")!)
-        
-        urlRequest.httpMethod = "GET"
-        urlRequest.allHTTPHeaderFields = headers
         
         let service = APIService()
         
-        service.fetch(Genre.self, url: urlRequest) { result in
-            DispatchQueue.main.async {
+        Task {
+            do {
+                var urlRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/genre/movie/list?language=en")!)
                 
-                self.isLoading = false
+                urlRequest.httpMethod = "GET"
+                urlRequest.allHTTPHeaderFields = headers
                 
-                switch result {
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                case .success(let genre):
-                    print("--- sucess with \(genre.genres.count)")
+                let genre: Genre = try await service.fetch(Genre.self, url: urlRequest)
+                
+                DispatchQueue.main.async {
+                    self.isLoading = false
                     self.allGenres = genre.genres
                 }
+            } catch {
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.errorMessage = error.localizedDescription
+                }
             }
-            
         }
+        
+//        service.fetch(Genre.self, url: urlRequest) { result in
+//            DispatchQueue.main.async {
+//
+//                self.isLoading = false
+//
+//                switch result {
+//                case .failure(let error):
+//                    self.errorMessage = error.localizedDescription
+//                case .success(let genre):
+//                    print("--- sucess with \(genre.genres.count)")
+//                    self.allGenres = genre.genres
+//                }
+//            }
+//
+//        }
         
     }
 }

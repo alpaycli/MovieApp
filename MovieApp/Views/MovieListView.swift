@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+enum EndPoint: String, CaseIterable, Identifiable {
+    var id: String { rawValue }
+    
+    case nowShowing = "now_showing"
+    case popular
+    case topRated = "top_rated"
+    case upcoming
+}
+
 struct MovieListView: View {
     @State private var selectedCategory: Category = .nowShowing
     

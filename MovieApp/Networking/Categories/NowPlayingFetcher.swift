@@ -25,28 +25,28 @@ class NowPlayingMoviesFetcher: ObservableObject {
             "Authorization": const.auth,
             "accept": const.accept
         ]
-        var urlRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1")!)
-        
-        urlRequest.httpMethod = "GET"
-        urlRequest.allHTTPHeaderFields = headers
         
         let service = APIService()
         
-        service.fetch(MovieResponse.self, url: urlRequest) { result in
-            
-            DispatchQueue.main.async {
+        Task {
+            do {
+                var urlRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1")!)
                 
-                self.isLoading = false
+                urlRequest.httpMethod = "GET"
+                urlRequest.allHTTPHeaderFields = headers
                 
-                switch result {
-                case .failure(let error):
+                let movies: MovieResponse = try await service.fetch(MovieResponse.self, url: urlRequest)
+                
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.nowPlayingMovies = movies.results
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.isLoading = false
                     self.errorMessage = error.localizedDescription
-                case .success(let movie):
-                    print("--- sucess with \(movie.results.count)")
-                    self.nowPlayingMovies = movie.results
                 }
             }
-            
         }
     }
     
