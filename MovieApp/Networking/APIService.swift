@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct APIService {
+class APIService {
     
     func fetch<T: Decodable>(_ type: T.Type, url: URLRequest) async throws -> T {
         

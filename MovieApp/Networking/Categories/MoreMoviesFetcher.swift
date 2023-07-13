@@ -13,10 +13,12 @@ class MoreMoviesFetcher: ObservableObject {
     @Published var moreMovies: [Movie] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
-    
+
+    let service: APIService
     let movieId: Int
     
-    init(movieId: Int) {
+    init(service: APIService, movieId: Int) {
+        self.service = service
         self.movieId = movieId
         fetchMoreMovies()
     }
@@ -28,8 +30,6 @@ class MoreMoviesFetcher: ObservableObject {
             "Authorization": const.auth,
             "accept": const.accept
         ]
-        
-        let service = APIService()
         
         Task {
             do {

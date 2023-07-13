@@ -14,7 +14,10 @@ class GenreFetcher: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
-    init() {
+    let service: APIService
+    
+    init(service: APIService) {
+        self.service = service
         fetchGenres()
     }
     
@@ -26,8 +29,6 @@ class GenreFetcher: ObservableObject {
             "Authorization": const.auth,
             "accept": const.accept
         ]
-        
-        let service = APIService()
         
         Task {
             do {

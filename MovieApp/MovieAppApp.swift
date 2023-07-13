@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct MovieAppApp: App {
+    static let services = APIService()
     var body: some Scene {
-        WindowGroup {
-            MovieListView()
+        WindowGroup { 
+            MovieListView(service: MovieAppApp.services)
         }
     }
 }

@@ -21,11 +21,6 @@ struct MovieListView: View {
     
     let categories = ["Now Showing", "Popular", "Top Rated", "Upcoming"]
     
-    @StateObject var nowPlayingMoviesFetcher = NowPlayingMoviesFetcher()
-    @StateObject var popularMoviesFetcher = PopularMoviesFetcher()
-    @StateObject var topRatedMoviesFetcher = TopRatedFetcher()
-    @StateObject var upcomingMoviesFetcher = UpcomingMoviesFetcher()
-    
     let columns = [
         GridItem(.adaptive(minimum: 100))
     ]
@@ -43,6 +38,18 @@ struct MovieListView: View {
         }
     }
     
+    @StateObject var nowPlayingMoviesFetcher: NowPlayingMoviesFetcher
+    @StateObject var popularMoviesFetcher: PopularMoviesFetcher
+    @StateObject var topRatedMoviesFetcher: TopRatedFetcher
+    @StateObject var upcomingMoviesFetcher: UpcomingMoviesFetcher
+    
+    init(service: APIService) {
+        _nowPlayingMoviesFetcher = StateObject(wrappedValue: NowPlayingMoviesFetcher(service: service))
+        _popularMoviesFetcher = StateObject(wrappedValue: PopularMoviesFetcher(service: service))
+        _topRatedMoviesFetcher = StateObject(wrappedValue: TopRatedFetcher(service: service))
+        _upcomingMoviesFetcher = StateObject(wrappedValue: UpcomingMoviesFetcher(service: service))
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -55,7 +62,7 @@ struct MovieListView: View {
                                 HStack(spacing: 30) {
                                     ForEach(popularMoviesFetcher.popularMovies) { movie in
                                         NavigationLink {
-                                            MovieDetailView(movie: movie)
+                                            MovieDetailView(movie: movie, service: APIService())
                                         } label: {
                                             PosterImageView(movie: movie, width: 170, height: 300)
                                         }
@@ -93,7 +100,7 @@ struct MovieListView: View {
                             LazyVGrid(columns: columns) {
                                 ForEach(currentCategoryMovies) { movie in
                                     NavigationLink {
-                                        MovieDetailView(movie: movie)
+                                        MovieDetailView(movie: movie, service: APIService())
                                     } label: {
                                         PosterImageView(movie: movie, width: 115, height: 200)
                                     }
@@ -110,7 +117,8 @@ struct MovieListView: View {
 }
 
 struct MovieListView_Previews: PreviewProvider {
+    static let service = APIService()
     static var previews: some View {
-        MovieListView()
+        MovieListView(service: service)
     }
 }

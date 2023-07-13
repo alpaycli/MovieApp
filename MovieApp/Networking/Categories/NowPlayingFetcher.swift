@@ -14,7 +14,10 @@ class NowPlayingMoviesFetcher: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
-    init() {
+    let service: APIService
+    
+    init(service: APIService) {
+        self.service = service
         fetchNowPlayingMovies()
     }
     
@@ -25,8 +28,6 @@ class NowPlayingMoviesFetcher: ObservableObject {
             "Authorization": const.auth,
             "accept": const.accept
         ]
-        
-        let service = APIService()
         
         Task {
             do {
@@ -48,14 +49,6 @@ class NowPlayingMoviesFetcher: ObservableObject {
                 }
             }
         }
-    }
-    
-    func successNowPlayingMovies() -> NowPlayingMoviesFetcher {
-        let fetcher = NowPlayingMoviesFetcher()
-        
-        fetcher.nowPlayingMovies = Movie.exampleResult()
-        
-        return fetcher
     }
     
 }

@@ -9,11 +9,12 @@ import SwiftUI
 
 struct MovieDetailView: View {
     let movie: Movie
-    @StateObject var genreFetcher = GenreFetcher()
+    @StateObject var genreFetcher: GenreFetcher
     @StateObject var moreMoviesFetcher: MoreMoviesFetcher
-    init(movie: Movie) {
+    init(movie: Movie, service: APIService) {
         self.movie = movie
-        _moreMoviesFetcher = StateObject(wrappedValue: MoreMoviesFetcher(movieId: movie.id))
+        _genreFetcher = StateObject(wrappedValue: GenreFetcher(service: service))
+        _moreMoviesFetcher = StateObject(wrappedValue: MoreMoviesFetcher(service: service, movieId: movie.id))
     }
     var moreMovies: [Movie] {
         moreMoviesFetcher.moreMovies
@@ -125,7 +126,7 @@ struct MovieDetailView: View {
                                     HStack(spacing: 15) {
                                         ForEach(moreMovies) { movie in
                                             NavigationLink {
-                                                MovieDetailView(movie: movie)
+                                                MovieDetailView(movie: movie, service: APIService())
                                             } label: {
                                                 PosterImageView(movie: movie, width: 115, height: 200)
                                             }
@@ -148,7 +149,8 @@ struct MovieDetailView: View {
 }
 
 struct MovieDetailView_Previews: PreviewProvider {
+    static let service = APIService()
     static var previews: some View {
-        MovieDetailView(movie: Movie.exampleResult()[0])
+        MovieDetailView(movie: Movie.exampleResult()[0], service: service)
     }
 }
