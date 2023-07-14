@@ -12,7 +12,7 @@ struct MovieAppApp: App {
     static let services = APIService()
     var body: some Scene {
         WindowGroup { 
-            MovieListView(service: MovieAppApp.services)
+            TabBarView(service: MovieAppApp.services)
         }
     }
 }
