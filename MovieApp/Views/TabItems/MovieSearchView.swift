@@ -17,19 +17,30 @@ struct MovieSearchView: View {
    
     var body: some View {
         NavigationView {
-            ScrollView {
-                if searchText.isEmpty {
-                    Text("No content")
-                } else {
-                    ForEach(searchState.searchResults) { item in
-                        Text(item.title)
+            ZStack {
+                Color.backgroundColor
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        if searchText.isEmpty {
+                            Text("No content")
+                        } else {
+                            ForEach(searchState.searchResults) { movie in
+                                NavigationLink {
+                                    MovieDetailView(movie: movie, service: APIService())
+                                } label: {
+                                    SearchItemView(movie: movie)
+                                }
+                            }
+                        }
                     }
                 }
+                .navigationTitle("Search")
+                .searchable(text: $searchText, prompt: "Search movies")
+                .onChange(of: searchText) { newValue in
+                    searchState.search(text: newValue.trimmingCharacters(in: .whitespacesAndNewlines))
             }
-            .navigationTitle("Search")
-            .searchable(text: $searchText, prompt: "Search movies")
-            .onChange(of: searchText) { newValue in
-                searchState.search(text: newValue.trimmingCharacters(in: .whitespacesAndNewlines))
             }
         }
     }

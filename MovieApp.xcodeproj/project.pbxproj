@@ -117,7 +117,6 @@
 			children = (
 				C9FD22212A617E5D00C03F29 /* TabBarView.swift */,
 				C9630B8E2A50A9A3006C5B01 /* MovieDetailView.swift */,
-				C9FD22242A617FB900C03F29 /* SearchItemView.swift */,
 				C9FD22232A617F9600C03F29 /* TabItems */,
 			);
 			path = Views;
@@ -170,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				C9630B862A50821E006C5B01 /* PosterImageView.swift */,
+				C9FD22242A617FB900C03F29 /* SearchItemView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
