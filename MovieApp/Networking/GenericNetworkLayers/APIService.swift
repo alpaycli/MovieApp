@@ -2,7 +2,7 @@
 //  APIService.swift
 //  MovieApp
 //
-//  Created by Alpay Calalli on 01.07.23.
+//  Created by Alpay Calalli on 16.07.23.
 //
 
 import Foundation
@@ -32,5 +32,6 @@ class APIService {
         }
     }
 }
+
 
 

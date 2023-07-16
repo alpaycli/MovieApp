@@ -23,15 +23,11 @@ struct MovieSearchView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading) {
-                        if searchText.isEmpty {
-                            Text("No content")
-                        } else {
-                            ForEach(searchState.searchResults) { movie in
-                                NavigationLink {
-                                    MovieDetailView(movie: movie, service: APIService())
-                                } label: {
-                                    SearchItemView(movie: movie)
-                                }
+                        ForEach(searchState.searchResults) { movie in
+                            NavigationLink {
+                                MovieDetailView(movie: movie, service: APIService())
+                            } label: {
+                                SearchItemView(movie: movie)
                             }
                         }
                     }

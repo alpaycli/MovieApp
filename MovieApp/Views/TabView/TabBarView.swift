@@ -16,12 +16,12 @@ struct TabBarView: View {
         TabView {
             MovieListView(service: service)
                 .tabItem {
-                    Label("Movies", systemImage: "")
+                    Label("Movies", systemImage: "tv")
                 }
             
             MovieSearchView(service: service)
                 .tabItem {
-                    Label("Search", systemImage: "")
+                    Label("Search", systemImage: "magnifyingglass")
                 }
         }
     }
