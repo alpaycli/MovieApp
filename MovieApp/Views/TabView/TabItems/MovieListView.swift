@@ -7,47 +7,18 @@
 
 import SwiftUI
 
-enum EndPoint: String, CaseIterable, Identifiable {
-    var id: String { rawValue }
-    
-    case nowShowing = "now_showing"
-    case popular
-    case topRated = "top_rated"
-    case upcoming
-}
-
 struct MovieListView: View {
-    @State private var selectedCategory: Category = .nowShowing
+    @State private var movies: [Movie] = []
+    @State private var selectedCategory: MovieCategory = .nowShowing
     
-    let categories = ["Now Showing", "Popular", "Top Rated", "Upcoming"]
-    
-    let columns = [
+    private let columns = [
         GridItem(.adaptive(minimum: 100))
     ]
     
-    var currentCategoryMovies: [Movie] {
-        switch selectedCategory {
-        case .nowShowing:
-            return nowPlayingMoviesFetcher.nowPlayingMovies
-        case .popular:
-            return popularMoviesFetcher.popularMovies
-        case .topRated:
-            return topRatedMoviesFetcher.topRatedMovies
-        case .upcoming:
-            return upcomingMoviesFetcher.upcomingMovies
-        }
-    }
+    @StateObject private var viewModel: MovieListViewModel
     
-    @StateObject var nowPlayingMoviesFetcher: NowPlayingMoviesFetcher
-    @StateObject var popularMoviesFetcher: PopularMoviesFetcher
-    @StateObject var topRatedMoviesFetcher: TopRatedFetcher
-    @StateObject var upcomingMoviesFetcher: UpcomingMoviesFetcher
-    
-    init(service: APIService) {
-        _nowPlayingMoviesFetcher = StateObject(wrappedValue: NowPlayingMoviesFetcher(service: service))
-        _popularMoviesFetcher = StateObject(wrappedValue: PopularMoviesFetcher(service: service))
-        _topRatedMoviesFetcher = StateObject(wrappedValue: TopRatedFetcher(service: service))
-        _upcomingMoviesFetcher = StateObject(wrappedValue: UpcomingMoviesFetcher(service: service))
+    init(service: MoviesDataService) {
+        self._viewModel = StateObject(wrappedValue: MovieListViewModel(service: service))
     }
     
     var body: some View {
@@ -60,9 +31,9 @@ struct MovieListView: View {
                         Section {
                             ScrollView(.horizontal) {
                                 HStack(spacing: 30) {
-                                    ForEach(popularMoviesFetcher.popularMovies) { movie in
+                                    ForEach(viewModel.popularMovies) { movie in
                                         NavigationLink {
-                                            MovieDetailView(movie: movie, service: APIService())
+                                        //    MovieDetailView(movie: movie, service: APIService())
                                         } label: {
                                             PosterImageView(movie: movie, width: 170, height: 300)
                                         }
@@ -76,11 +47,21 @@ struct MovieListView: View {
                         Section {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack {
-                                    ForEach(Category.allCases) { category in
+                                    ForEach(MovieCategory.allCases) { category in
                                         Button {
                                             selectedCategory = category
+                                            switch selectedCategory {
+                                            case .nowShowing:
+                                                movies = viewModel.nowShowingMovies
+                                            case .popular:
+                                                movies = viewModel.popularMovies
+                                            case .topRated:
+                                                movies = viewModel.topRatedMovies
+                                            case .upcoming:
+                                                movies = viewModel.upcomingMovies
+                                            }
                                         } label: {
-                                            Text(category.rawValue)
+                                            Text(category.displayTitle)
                                                 .fontWeight(.semibold)
                                                 .padding()
                                                 .underline(selectedCategory == category)
@@ -98,26 +79,34 @@ struct MovieListView: View {
                         
                         Section {
                             LazyVGrid(columns: columns) {
-                                ForEach(currentCategoryMovies) { movie in
+                                ForEach(movies) { movie in
                                     NavigationLink {
-                                        MovieDetailView(movie: movie, service: APIService())
+                                      //  MovieDetailView(movie: movie, service: APIService())
                                     } label: {
                                         PosterImageView(movie: movie, width: 115, height: 200)
                                     }
                                 }
                             }
+                            
+                            EmptyView()
+                                .onAppear {
+                                    print("Next Page")
+                                }
                         }
                     }
                 }
             }
-            .navigationTitle("What do you want to watch ?")
+            .onAppear {
+                movies = viewModel.nowShowingMovies
+            }
+            .navigationTitle("Watch")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
 
 struct MovieListView_Previews: PreviewProvider {
-    static let service = APIService()
+    static let service = MoviesDataService()
     static var previews: some View {
         MovieListView(service: service)
     }

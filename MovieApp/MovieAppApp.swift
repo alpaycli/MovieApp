@@ -9,10 +9,11 @@ import SwiftUI
 
 @main
 struct MovieAppApp: App {
-    static let services = APIService()
+    @StateObject private var dataService = MoviesDataService()
+    
     var body: some Scene {
         WindowGroup { 
-            TabBarView(service: MovieAppApp.services)
+            TabBarView(service: dataService)
         }
     }
 }

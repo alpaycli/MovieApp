@@ -6,12 +6,12 @@
 //
 
 import Foundation
-
-enum Category: String, CaseIterable, Identifiable {
-    var id: String { rawValue }
-    
-    case nowShowing = "Now Showing"
-    case popular = "Popular"
-    case topRated = "Top Rated"
-    case upcoming = "Upcoming"
-}
+//
+//enum Category: String, CaseIterable, Identifiable {
+//    var id: String { rawValue }
+//    
+//    case nowShowing = "Now Showing"
+//    case popular = "Popular"
+//    case topRated = "Top Rated"
+//    case upcoming = "Upcoming"
+//}

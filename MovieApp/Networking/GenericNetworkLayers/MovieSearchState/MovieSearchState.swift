@@ -13,9 +13,7 @@ class MovieSearchState: ObservableObject {
     @Published var searchResults: [Movie] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
-    
-    private let const = Const()
-    
+        
     private let service: APIService
     
     init(service: APIService) {
@@ -27,7 +25,7 @@ class MovieSearchState: ObservableObject {
         errorMessage = nil
         
         Task {
-            let urlRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(const.apiKey)&language=en-US&page=1&include_adult=false&query=\(text)".addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!)!)
+            let urlRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(Const.apiKey)&language=en-US&page=1&include_adult=false&query=\(text)".addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!)!)
             
             do {
                 isLoading = false

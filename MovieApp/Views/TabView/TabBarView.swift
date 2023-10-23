@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct TabBarView: View {
-    private let service: APIService
-    init(service: APIService) {
+    private let service: MoviesDataService
+    init(service: MoviesDataService) {
         self.service = service
     }
     var body: some View {
@@ -19,17 +19,16 @@ struct TabBarView: View {
                     Label("Movies", systemImage: "tv")
                 }
             
-            MovieSearchView(service: service)
-                .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
-                }
+//            MovieSearchView(service: service)
+//                .tabItem {
+//                    Label("Search", systemImage: "magnifyingglass")
+//                }
         }
     }
 }
 
 struct TabBarView_Previews: PreviewProvider {
-    static let service = APIService()
     static var previews: some View {
-        TabBarView(service: service)
+        TabBarView(service: MoviesDataService())
     }
 }

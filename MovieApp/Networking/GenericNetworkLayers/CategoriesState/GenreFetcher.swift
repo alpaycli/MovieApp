@@ -8,26 +8,22 @@
 import Foundation
 
 class GenreFetcher: ObservableObject {
-    let const = Const()
-    
     @Published var allGenres: [ResultGenre] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
-    let service: APIService
     
-    init(service: APIService) {
-        self.service = service
+    init() {
         fetchGenres()
     }
     
-    func fetchGenres() {
+    private func fetchGenres() {
         
         isLoading = true
         errorMessage = nil
         let headers = [
-            "Authorization": const.auth,
-            "accept": const.accept
+            "Authorization": Const.auth,
+            "accept": Const.accept
         ]
         
         Task {
@@ -37,7 +33,7 @@ class GenreFetcher: ObservableObject {
                 urlRequest.httpMethod = "GET"
                 urlRequest.allHTTPHeaderFields = headers
                 
-                let genre: Genre = try await service.fetch(Genre.self, url: urlRequest)
+                let genre: Genre = try await APIService.shared.fetch(Genre.self, url: urlRequest)
                 
                 DispatchQueue.main.async {
                     self.isLoading = false

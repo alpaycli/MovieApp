@@ -8,6 +8,8 @@
 import Foundation
 
 class APIService {
+    static let shared = APIService()
+    private init() { }
     
     func fetch<T: Decodable>(_ type: T.Type, url: URLRequest) async throws -> T {
         
@@ -32,6 +34,3 @@ class APIService {
         }
     }
 }
-
-
-

@@ -8,8 +8,6 @@
 import Foundation
 
 class MoreMoviesFetcher: ObservableObject {
-    let const = Const()
-    
     @Published var moreMovies: [Movie] = []
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
@@ -27,8 +25,8 @@ class MoreMoviesFetcher: ObservableObject {
         isLoading = true
         errorMessage = nil
         let headers = [
-            "Authorization": const.auth,
-            "accept": const.accept
+            "Authorization": Const.auth,
+            "accept": Const.accept
         ]
         
         Task {
