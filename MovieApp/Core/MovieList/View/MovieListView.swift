@@ -33,7 +33,7 @@ struct MovieListView: View {
                                 HStack(spacing: 30) {
                                     ForEach(viewModel.popularMovies) { movie in
                                         NavigationLink {
-                                        //    MovieDetailView(movie: movie, service: APIService())
+                                            MovieDetailView(movie: movie)
                                         } label: {
                                             PosterImageView(movie: movie, width: 170, height: 300)
                                         }
@@ -81,7 +81,7 @@ struct MovieListView: View {
                             LazyVGrid(columns: columns) {
                                 ForEach(movies) { movie in
                                     NavigationLink {
-                                      //  MovieDetailView(movie: movie, service: APIService())
+                                        MovieDetailView(movie: movie)
                                     } label: {
                                         PosterImageView(movie: movie, width: 115, height: 200)
                                     }

@@ -19,10 +19,10 @@ struct TabBarView: View {
                     Label("Movies", systemImage: "tv")
                 }
             
-//            MovieSearchView(service: service)
-//                .tabItem {
-//                    Label("Search", systemImage: "magnifyingglass")
-//                }
+            MovieSearchView()
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
         }
     }
 }

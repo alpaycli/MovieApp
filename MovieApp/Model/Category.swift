@@ -6,12 +6,25 @@
 //
 
 import Foundation
-//
-//enum Category: String, CaseIterable, Identifiable {
-//    var id: String { rawValue }
-//    
-//    case nowShowing = "Now Showing"
-//    case popular = "Popular"
-//    case topRated = "Top Rated"
-//    case upcoming = "Upcoming"
-//}
+
+enum MovieCategory: String, CaseIterable, Identifiable {
+    var id: String { rawValue }
+    
+    case nowShowing = "now_playing"
+    case popular = "popular"
+    case topRated = "top_rated"
+    case upcoming = "upcoming"
+    
+    var displayTitle: String {
+        switch self {
+        case .nowShowing:
+            "Now Showing"
+        case .popular:
+            "Popular"
+        case .topRated:
+            "Top Rated"
+        case .upcoming:
+            "Upcoming"
+        }
+    }
+}

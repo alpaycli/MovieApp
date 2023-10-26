@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct SearchItemView: View {
-    let movie: Movie
+    let movie: SearchMovie
     var body: some View {
         HStack {
-            PosterImageView(movie: movie, width: 95, height: 120)
+            PosterImageView(searchMovie: movie, width: 95, height: 120)
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(movie.originalTitle)
@@ -26,8 +26,7 @@ struct SearchItemView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.orange)
                 
-                Text(movie.releaseDate
-                    .map { String($0) }[...3].joined())
+                Text(movie.releaseDate)
                 .foregroundColor(Color.lightGrey)
                     .fontWeight(.bold)
                 
@@ -46,6 +45,6 @@ struct SearchItemView: View {
 
 struct SearchItemView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchItemView(movie: Movie.exampleResult()[0])
+        SearchItemView(movie: SearchMovie.example)
     }
 }

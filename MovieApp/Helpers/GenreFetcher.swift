@@ -12,13 +12,11 @@ class GenreFetcher: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
-    
     init() {
         fetchGenres()
     }
     
     private func fetchGenres() {
-        
         isLoading = true
         errorMessage = nil
         let headers = [
@@ -46,22 +44,5 @@ class GenreFetcher: ObservableObject {
                 }
             }
         }
-        
-//        service.fetch(Genre.self, url: urlRequest) { result in
-//            DispatchQueue.main.async {
-//
-//                self.isLoading = false
-//
-//                switch result {
-//                case .failure(let error):
-//                    self.errorMessage = error.localizedDescription
-//                case .success(let genre):
-//                    print("--- sucess with \(genre.genres.count)")
-//                    self.allGenres = genre.genres
-//                }
-//            }
-//
-//        }
-        
     }
 }

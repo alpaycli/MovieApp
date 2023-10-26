@@ -12,11 +12,9 @@ class MoreMoviesFetcher: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
 
-    let service: APIService
     let movieId: Int
     
-    init(service: APIService, movieId: Int) {
-        self.service = service
+    init(movieId: Int) {
         self.movieId = movieId
         fetchMoreMovies()
     }
@@ -36,7 +34,7 @@ class MoreMoviesFetcher: ObservableObject {
                 urlRequest.httpMethod = "GET"
                 urlRequest.allHTTPHeaderFields = headers
                 
-                let movies: MovieResponse = try await service.fetch(MovieResponse.self, url: urlRequest)
+                let movies: MovieResponse = try await APIService.shared.fetch(MovieResponse.self, url: urlRequest)
                 
                 DispatchQueue.main.async {
                     self.isLoading = false

@@ -8,20 +8,47 @@
 import SwiftUI
 
 struct PosterImageView: View {
-    let movie: Movie
-    
+    let movie: Movie?
+    let searchMovie: SearchMovie?
     let width: CGFloat
     let height: CGFloat
     
+    init(movie: Movie, width: CGFloat, height: CGFloat, searchMovie: SearchMovie? = nil) {
+        self.width = width
+        self.height = height
+        
+        self.movie = movie
+        self.searchMovie = searchMovie
+    }
+    
+    init(searchMovie: SearchMovie, width: CGFloat, height: CGFloat, movie: Movie? = nil) {
+        self.width = width
+        self.height = height
+        
+        self.searchMovie = searchMovie
+        self.movie = movie
+    }
+    
     var body: some View {
         HStack {
-            AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w500/\(movie.posterPath)")!) { image in
-                image.resizable()
-                    .scaledToFit()
-                    .frame(width: width, height: height)
-                    .cornerRadius(40)
-            } placeholder: {
-                ProgressView()
+            if let movie {
+                AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w500\(movie.posterPath)")) { image in
+                    image.resizable()
+                        .scaledToFit()
+                        .frame(width: width, height: height)
+                        .cornerRadius(40)
+                } placeholder: {
+                    ProgressView()
+                }
+            } else if let searchMovie {
+                AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w500\(searchMovie.posterPath)")) { image in
+                    image.resizable()
+                        .scaledToFit()
+                        .frame(width: width, height: height)
+                        .cornerRadius(40)
+                } placeholder: {
+                    ProgressView()
+                }
             }
         }
     }
